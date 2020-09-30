@@ -1,0 +1,23 @@
+﻿@api = http://localhost:5000
+
+### At first, create an account
+POST {{api}}/identity/sign-up HTTP/1.1
+content-type: application/json
+
+{
+"email": "spirebyte-user1@mailinator.com", "password": "secret", "role": "user"
+}
+
+### Authenticate and grab the access token 
+# @name sign_in 
+POST {{api}}/identity/sign-in HTTP/1.1
+Content-Type: application/json
+
+{
+"email": "spirebyte-user1@mailinator.com", "password": "secret"
+}
+
+### Get your user account details 
+@accessToken = {{sign_in.response.body.$.accessToken}} 
+GET {{api}}/identity/me HTTP/1.1
+Authorization: Bearer {{accessToken}}

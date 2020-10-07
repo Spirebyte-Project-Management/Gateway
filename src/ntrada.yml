@@ -29,9 +29,9 @@ extensions:
     allowedOrigins:
       - '*'
     allowedMethods:
-      - post
-      - put
-      - delete
+      - POST
+      - PUT
+      - DELETE
     allowedHeaders:
       - '*'
     exposedHeaders:
@@ -84,6 +84,12 @@ modules:
     
       - upstream: /me
         method: GET
+        use: downstream
+        downstream: identity-service/me
+        auth: true
+
+      - upstream: /me
+        method: PUT
         use: downstream
         downstream: identity-service/me
         auth: true

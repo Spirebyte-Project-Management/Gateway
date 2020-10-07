@@ -21,3 +21,11 @@ Content-Type: application/json
 @accessToken = {{sign_in.response.body.$.accessToken}} 
 GET {{api}}/identity/me HTTP/1.1
 Authorization: Bearer {{accessToken}}
+
+### Get your user account details 
+PUT {{api}}/identity/me HTTP/1.1
+Authorization: Bearer {{accessToken}}
+
+{
+"fullname": "Admintest1"
+}

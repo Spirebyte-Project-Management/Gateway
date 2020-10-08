@@ -140,3 +140,29 @@ modules:
       identity-service:
         localUrl: localhost:5004
         url: identity-service
+
+
+  projects:
+    path: projects
+    routes:
+      - upstream: /
+        method: GET
+        use: downstream
+        downstream: projects-service/projects?ownerId=@user_id
+        auth: true
+    
+      - upstream: /
+        method: POST
+        use: downstream
+        downstream: projects-service/projects
+        auth: true
+        resourceId:
+          property: projectId
+          generate: true
+        bind:
+          - ownerId:@user_id
+    
+    services:
+      projects-service:
+        localUrl: localhost:5001
+        url: projects-service

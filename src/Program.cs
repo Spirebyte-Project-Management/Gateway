@@ -44,7 +44,6 @@ namespace Spirebyte.APIGateway
                             .AddSingleton<ISpanContextBuilder, SpanContextBuilder>()
                             .AddSingleton<IHttpRequestHook, HttpRequestHook>()
                             .AddConvey()
-                            .AddMetrics()
                             .AddSecurity())
                         .Configure(app => app.UseNtrada())
                         .UseLogging();

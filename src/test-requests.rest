@@ -29,3 +29,12 @@ Authorization: Bearer {{accessToken}}
 {
 "fullname": "Admintest1"
 }
+
+### create project
+POST {{api}}/projects HTTP/1.1
+content-type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+"title": "Test title"
+}

@@ -14,13 +14,13 @@
     <PackageReference Include="Convey.Security" Version="0.4.354" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
     <PackageReference Include="NetEscapades.Configuration.Yaml" Version="2.0.0" />
-    <PackageReference Include="Ntrada" Version="0.4.*" />
-    <PackageReference Include="Ntrada.Extensions.Cors" Version="0.4.*" />
-    <PackageReference Include="Ntrada.Extensions.CustomErrors" Version="0.4.*" />
-    <PackageReference Include="Ntrada.Extensions.Jwt" Version="0.4.*" />
-    <PackageReference Include="Ntrada.Extensions.RabbitMq" Version="0.4.*" />
-    <PackageReference Include="Ntrada.Extensions.Swagger" Version="0.4.*" />
-    <PackageReference Include="Ntrada.Extensions.Tracing" Version="0.4.*" />
+    <PackageReference Include="Partytitan.Ntrada" Version="1.0.0" />
+    <PackageReference Include="Partytitan.Ntrada.Extensions.Cors" Version="1.0.0" />
+    <PackageReference Include="Partytitan.Ntrada.Extensions.CustomErrors" Version="1.0.0" />
+    <PackageReference Include="Partytitan.Ntrada.Extensions.Jwt" Version="1.0.0" />
+    <PackageReference Include="Partytitan.Ntrada.Extensions.RabbitMq" Version="1.0.0" />
+    <PackageReference Include="Partytitan.Ntrada.Extensions.Swagger" Version="1.0.0" />
+    <PackageReference Include="Partytitan.Ntrada.Extensions.Tracing" Version="1.0.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -31,9 +31,10 @@
     <Content Include="ntrada.yml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Remove="ntrada-async.yml" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="Certs\**" CopyToPublishDirectory="Always" />
-  </ItemGroup></Project>
+  </ItemGroup>
+
+</Project>

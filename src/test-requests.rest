@@ -17,6 +17,14 @@ Content-Type: application/json
 "email": "spirebyte-user1@mailinator.com", "password": "secret"
 }
 
+### forgot password
+POST {{api}}/identity/forgot-password HTTP/1.1
+content-type: application/json
+
+{
+"email": "spirebyte-user1@mailinator.com"
+}
+
 ### Get your user account details 
 @accessToken = {{sign_in.response.body.$.accessToken}} 
 GET {{api}}/identity/me HTTP/1.1

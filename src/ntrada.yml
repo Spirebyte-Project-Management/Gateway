@@ -93,6 +93,18 @@ modules:
         use: downstream
         downstream: identity-service/me
         auth: true
+
+      - upstream: /forgot-password
+        method: POST
+        use: downstream
+        downstream: identity-service/forgot-password
+        auth: false
+
+      - upstream: /reset-password
+        method: POST
+        use: downstream
+        downstream: identity-service/reset-password
+        auth: false
     
       - upstream: /sign-up
         method: POST

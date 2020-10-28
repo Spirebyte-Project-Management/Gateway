@@ -136,6 +136,18 @@ modules:
         use: downstream
         downstream: projects-service/projects?ownerId=@user_id
         auth: true
+
+      - upstream: /{key}
+        method: GET
+        use: downstream
+        downstream: projects-service/projects/{key}
+        auth: true
+
+      - upstream: /doeskeyexist/{key}
+        method: GET
+        use: downstream
+        downstream: projects-service/projects/doeskeyexist/{key}
+        auth: true
     
       - upstream: /
         method: POST
@@ -152,3 +164,28 @@ modules:
       projects-service:
         localUrl: localhost:5001
         url: projects-service
+
+  issues:
+    path: issues
+    routes:
+      - upstream: /{projectId}
+        method: GET
+        use: downstream
+        downstream: issues-service/issues/{projectId}
+        auth: true
+    
+      - upstream: /{projectId}
+        method: POST
+        use: downstream
+        downstream: issues-service/issues
+        auth: true
+        resourceId:
+          property: issueId
+          generate: true
+        bind:
+          - projectId:{projectId}
+    
+    services:
+      issues-service:
+        localUrl: localhost:5003
+        url: issues-service

@@ -207,10 +207,16 @@ modules:
   issues:
     path: issues
     routes:
-      - upstream: /{projectId}
+      - upstream: /forProject/{projectKey}
         method: GET
         use: downstream
-        downstream: issues-service/issues/{projectId}
+        downstream: issues-service/issues/forProject/{projectKey}
+        auth: true
+
+      - upstream: /{issueKey}
+        method: GET
+        use: downstream
+        downstream: issues-service/issues/{issueKey}
         auth: true
     
       - upstream: /{projectId}

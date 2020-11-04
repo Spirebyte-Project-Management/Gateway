@@ -159,7 +159,14 @@ modules:
           generate: true
         bind:
           - ownerId:@user_id
-    
+
+      - upstream: /{key}
+        method: PUT
+        use: downstream
+        downstream: projects-service/projects/{key}
+        auth: true
+        bind:
+          - key:{key}
     services:
       projects-service:
         localUrl: localhost:5001

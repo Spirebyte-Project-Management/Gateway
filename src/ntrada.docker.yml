@@ -106,6 +106,12 @@ modules:
         auth: true
         claims:
           role: admin
+
+      - upstream: /users/withids
+        method: GET
+        use: downstream
+        downstream: identity-service/users/withids
+        auth: true
     
       - upstream: /me
         method: GET
@@ -194,13 +200,13 @@ modules:
   issues:
     path: issues
     routes:
-      - upstream: /{key}
+      - upstream: /{projectId}
         method: GET
         use: downstream
-        downstream: issues-service/issues/{key}
+        downstream: issues-service/issues/{projectId}
         auth: true
     
-      - upstream: /{key}
+      - upstream: /{projectId}
         method: POST
         use: downstream
         downstream: issues-service/issues
@@ -209,7 +215,7 @@ modules:
           property: issueId
           generate: true
         bind:
-          - projectKey:{key}
+          - projectId:{projectId}
     
     services:
       issues-service:

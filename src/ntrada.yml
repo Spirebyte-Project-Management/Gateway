@@ -74,13 +74,13 @@ modules:
   identity:
     path: identity
     routes:
-      - upstream: /users/{userId}
-        method: GET
+      - upstream: /users
+        methods:
+          - GET
+        matchAll: true
         use: downstream
-        downstream: identity-service/users/{userId}
+        downstream: identity-service/users
         auth: true
-        claims:
-          role: admin
     
       - upstream: /me
         method: GET

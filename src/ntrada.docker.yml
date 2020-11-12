@@ -239,6 +239,14 @@ modules:
           generate: true
         bind:
           - projectId:{projectId}
+
+      - upstream: /{key}
+        method: PUT
+        use: downstream
+        downstream: issues-service/issues/{key}
+        auth: true
+        bind:
+          - key:{key}
     
     services:
       issues-service:

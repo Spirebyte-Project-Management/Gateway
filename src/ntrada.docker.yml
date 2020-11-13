@@ -247,6 +247,14 @@ modules:
         auth: true
         bind:
           - key:{key}
+
+      - upstream: /{key}
+        method: DELETE
+        use: downstream
+        downstream: issues-service/issues/{key}
+        auth: true
+        bind:
+          - key:{key}
     
     services:
       issues-service:

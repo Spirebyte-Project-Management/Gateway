@@ -229,6 +229,32 @@ modules:
         auth: true
         bind:
           - key:{key}
+
+  sprints:
+    path: sprints
+    routes:
+      - upstream: /forProject/{projectKey}
+        method: GET
+        use: downstream
+        downstream: sprints-service/sprints/forProject/{projectKey}
+        auth: true
+
+      - upstream: /{key}
+        method: GET
+        use: downstream
+        downstream: sprints-service/sprints/{key}
+        auth: true
+    
+      - upstream: /{projectId}
+        method: POST
+        use: downstream
+        downstream: sprints-service/sprints
+        auth: true
+        resourceId:
+          property: sprintId
+          generate: true
+        bind:
+          - projectId:{projectId}
     
     services:
       issues-service:

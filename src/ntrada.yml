@@ -230,6 +230,11 @@ modules:
         bind:
           - key:{key}
 
+    services:
+      issues-service:
+        localUrl: localhost:5003
+        url: issues-service
+
   sprints:
     path: sprints
     routes:
@@ -257,6 +262,6 @@ modules:
           - projectId:{projectId}
     
     services:
-      issues-service:
-        localUrl: localhost:5003
-        url: issues-service
+      sprints-service:
+        localUrl: localhost:5005
+        url: sprints-service

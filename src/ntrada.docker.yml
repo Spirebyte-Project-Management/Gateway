@@ -223,10 +223,24 @@ modules:
         downstream: issues-service/issues/forProject/{projectKey}
         auth: true
 
+      - upstream: /backlogForProject/{projectKey}
+        method: GET
+        use: downstream
+        downstream: issues-service/issues/backlogForProject/{projectKey}
+        auth: true
+
       - upstream: /{issueKey}
         method: GET
         use: downstream
         downstream: issues-service/issues/{issueKey}
+        auth: true
+
+      - upstream: /withIds
+        methods:
+          - GET
+        matchAll: true
+        use: downstream
+        downstream: issues-service/issues/withIds
         auth: true
     
       - upstream: /{projectId}
@@ -276,6 +290,24 @@ modules:
         downstream: sprints-service/sprints/{key}
         auth: true
     
+      - upstream: /{sprintKey}/addIssue/{issueKey}
+        method: POST
+        use: downstream
+        downstream: sprints-service/sprints/{sprintKey}/addIssue/{issueKey}
+        auth: true
+        bind:
+          - sprintKey:{sprintKey}
+          - issueKey:{issueKey}
+
+      - upstream: /{sprintKey}/removeIssue/{issueKey}
+        method: POST
+        use: downstream
+        downstream: sprints-service/sprints/{sprintKey}/removeIssue/{issueKey}
+        auth: true
+        bind:
+          - sprintKey:{sprintKey}
+          - issueKey:{issueKey}
+
       - upstream: /{projectId}
         method: POST
         use: downstream

@@ -1,8 +1,8 @@
-using System;
 using Microsoft.Extensions.DependencyInjection;
 using Ntrada;
 using Ntrada.Extensions.RabbitMq;
 using OpenTracing;
+using System;
 
 namespace Spirebyte.APIGateway.Infrastructure
 {

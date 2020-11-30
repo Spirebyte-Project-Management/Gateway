@@ -1,20 +1,17 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Convey;
 using Convey.Logging;
-using Convey.Metrics.AppMetrics;
 using Convey.Security;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Ntrada;
 using Ntrada.Extensions.RabbitMq;
 using Ntrada.Hooks;
 using Spirebyte.APIGateway.Infrastructure;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Spirebyte.APIGateway
 {

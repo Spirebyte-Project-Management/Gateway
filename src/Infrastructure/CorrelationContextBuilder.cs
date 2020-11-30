@@ -1,10 +1,10 @@
-using System;
-using System.Linq;
-using System.Security.Claims;
 using Microsoft.Extensions.DependencyInjection;
 using Ntrada;
 using Ntrada.Extensions.RabbitMq;
 using OpenTracing;
+using System;
+using System.Linq;
+using System.Security.Claims;
 
 namespace Spirebyte.APIGateway.Infrastructure
 {
@@ -24,7 +24,7 @@ namespace Spirebyte.APIGateway.Infrastructure
                 tracer.ActiveSpan is null ? string.Empty : tracer.ActiveSpan.Context.ToString();
 
             var name = string.Empty;
-            if (executionData.Route.Config is {} &&
+            if (executionData.Route.Config is { } &&
                 executionData.Route.Config.TryGetValue("routing_key", out var routingKey))
             {
                 name = routingKey ?? string.Empty;

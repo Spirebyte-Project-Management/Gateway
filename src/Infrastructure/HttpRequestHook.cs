@@ -1,9 +1,9 @@
-using System.Net.Http;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Ntrada;
 using Ntrada.Extensions.RabbitMq;
 using Ntrada.Hooks;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace Spirebyte.APIGateway.Infrastructure
 {
@@ -21,7 +21,7 @@ namespace Spirebyte.APIGateway.Infrastructure
         {
             var context = JsonConvert.SerializeObject(_contextBuilder.Build(data));
             request.Headers.TryAddWithoutValidation("Correlation-Context", context);
-            
+
             return Task.CompletedTask;
         }
     }

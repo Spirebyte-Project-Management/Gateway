@@ -197,6 +197,12 @@ modules:
         downstream: issues-service/issues/forProject/{projectKey}
         auth: true
 
+      - upstream: /epicsForProject/{projectKey}
+        method: GET
+        use: downstream
+        downstream: issues-service/issues/epicsForProject/{projectKey}
+        auth: true
+
       - upstream: /backlogForProject/{projectKey}
         method: GET
         use: downstream

@@ -137,32 +137,32 @@ modules:
         downstream: projects-service/projects?ownerId=@user_id
         auth: true
 
-      - upstream: /{key}
+      - upstream: /{id}
         method: GET
         use: downstream
-        downstream: projects-service/projects/{key}
+        downstream: projects-service/projects/{id}
         auth: true
 
-      - upstream: /{key}/join
+      - upstream: /{id}/join
         method: POST
         use: downstream
-        downstream: projects-service/projects/{key}/join
+        downstream: projects-service/projects/{id}/join
         auth: true
         bind:
-          - key:{key}
+          - projectId:{id}
 
-      - upstream: /{key}/leave
+      - upstream: /{id}/leave
         method: POST
         use: downstream
-        downstream: projects-service/projects/{key}/leave
+        downstream: projects-service/projects/{id}/leave
         auth: true
         bind:
-          - key:{key}
+          - projectId:{id}
 
-      - upstream: /doeskeyexist/{key}
+      - upstream: /exists/{id}
         method: GET
         use: downstream
-        downstream: projects-service/projects/doeskeyexist/{key}
+        downstream: projects-service/projects/exists/{id}
         auth: true
     
       - upstream: /
@@ -170,19 +170,16 @@ modules:
         use: downstream
         downstream: projects-service/projects
         auth: true
-        resourceId:
-          property: projectId
-          generate: true
         bind:
           - ownerId:@user_id
 
-      - upstream: /{key}
+      - upstream: /{id}
         method: PUT
         use: downstream
-        downstream: projects-service/projects/{key}
+        downstream: projects-service/projects/{id}
         auth: true
         bind:
-          - key:{key}
+          - id:{id}
     services:
       projects-service:
         localUrl: localhost:5001
@@ -191,64 +188,35 @@ modules:
   issues:
     path: issues
     routes:
-      - upstream: /forProject/{projectKey}
-        method: GET
-        use: downstream
-        downstream: issues-service/issues/forProject/{projectKey}
-        auth: true
-
-      - upstream: /epicsForProject/{projectKey}
-        method: GET
-        use: downstream
-        downstream: issues-service/issues/epicsForProject/{projectKey}
-        auth: true
-
-      - upstream: /backlogForProject/{projectKey}
-        method: GET
-        use: downstream
-        downstream: issues-service/issues/backlogForProject/{projectKey}
-        auth: true
-
-      - upstream: /{issueKey}
-        method: GET
-        use: downstream
-        downstream: issues-service/issues/{issueKey}
-        auth: true
-
-      - upstream: /withIds
+      - upstream: /
         methods:
           - GET
         matchAll: true
         use: downstream
-        downstream: issues-service/issues/withIds
+        downstream: issues-service/issues
         auth: true
     
-      - upstream: /{projectId}
+      - upstream: /
         method: POST
         use: downstream
         downstream: issues-service/issues
         auth: true
-        resourceId:
-          property: issueId
-          generate: true
-        bind:
-          - projectId:{projectId}
 
-      - upstream: /{key}
+      - upstream: /{issueId}
         method: PUT
         use: downstream
-        downstream: issues-service/issues/{key}
+        downstream: issues-service/issues/{issueId}
         auth: true
         bind:
-          - key:{key}
+          - issueId:{issueId}
 
-      - upstream: /{key}
+      - upstream: /{issueId}
         method: DELETE
         use: downstream
-        downstream: issues-service/issues/{key}
+        downstream: issues-service/issues/{issueId}
         auth: true
         bind:
-          - key:{key}
+          - issueId:{issueId}
 
     services:
       issues-service:
@@ -258,46 +226,37 @@ modules:
   sprints:
     path: sprints
     routes:
-      - upstream: /forProject/{projectKey}
-        method: GET
+      - upstream: /
+        methods:
+          - GET
+        matchAll: true
         use: downstream
-        downstream: sprints-service/sprints/forProject/{projectKey}
+        downstream: sprints-service/sprints
         auth: true
 
-      - upstream: /{key}
-        method: GET
-        use: downstream
-        downstream: sprints-service/sprints/{key}
-        auth: true
-
-      - upstream: /{sprintKey}/addIssue/{issueKey}
+      - upstream: /{sprintId}/addIssue/{issueId}
         method: POST
         use: downstream
-        downstream: sprints-service/sprints/{sprintKey}/addIssue/{issueKey}
+        downstream: sprints-service/sprints/{sprintId}/addIssue/{issueId}
         auth: true
         bind:
-          - sprintKey:{sprintKey}
-          - issueKey:{issueKey}
+          - sprintId:{sprintId}
+          - issueId:{issueId}
 
-      - upstream: /{sprintKey}/removeIssue/{issueKey}
+      - upstream: /{sprintId}/removeIssue/{issueId}
         method: POST
         use: downstream
-        downstream: sprints-service/sprints/{sprintKey}/removeIssue/{issueKey}
+        downstream: sprints-service/sprints/{sprintId}/removeIssue/{issueId}
         auth: true
         bind:
-          - sprintKey:{sprintKey}
-          - issueKey:{issueKey}
+          - sprintId:{sprintId}
+          - issueId:{issueId}
     
-      - upstream: /{projectId}
+      - upstream: /
         method: POST
         use: downstream
         downstream: sprints-service/sprints
         auth: true
-        resourceId:
-          property: sprintId
-          generate: true
-        bind:
-          - projectId:{projectId}
     
     services:
       sprints-service:

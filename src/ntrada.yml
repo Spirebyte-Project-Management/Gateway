@@ -234,6 +234,14 @@ modules:
         downstream: sprints-service/sprints
         auth: true
 
+      - upstream: /{id}/start
+        method: POST
+        use: downstream
+        downstream: sprints-service/sprints/{id}/start
+        auth: true
+        bind:
+          - id:{id}
+
       - upstream: /{sprintId}/addIssue/{issueId}
         method: POST
         use: downstream

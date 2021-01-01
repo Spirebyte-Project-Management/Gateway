@@ -268,6 +268,14 @@ modules:
         bind:
           - id:{id}
 
+      - upstream: /{id}/end
+        method: POST
+        use: downstream
+        downstream: sprints-service/sprints/{id}/end
+        auth: true
+        bind:
+          - id:{id}
+
       - upstream: /{sprintId}/addIssue/{issueId}
         method: POST
         use: downstream

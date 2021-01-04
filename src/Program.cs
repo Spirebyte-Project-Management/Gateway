@@ -36,12 +36,18 @@ namespace Spirebyte.APIGateway
 
                             builder.AddYamlFile(configPath, false);
                         })
-                        .ConfigureServices(services => services.AddNtrada()
-                            .AddSingleton<IContextBuilder, CorrelationContextBuilder>()
-                            .AddSingleton<ISpanContextBuilder, SpanContextBuilder>()
-                            .AddSingleton<IHttpRequestHook, HttpRequestHook>()
-                            .AddConvey()
-                            .AddSecurity())
+                        .ConfigureServices(services =>
+                        {
+                            services.AddNtrada()
+                                .AddSingleton<IContextBuilder, CorrelationContextBuilder>()
+                                .AddSingleton<ISpanContextBuilder, SpanContextBuilder>()
+                                .AddSingleton<IHttpRequestHook, HttpRequestHook>()
+                                .AddConvey()
+                                .AddSecurity();
+                            var sslConfig = Convert.ToBoolean(Environment.GetEnvironmentVariable("USE_SSL"));
+                            if (sslConfig)
+                                services.AddLettuceEncrypt();
+                        })
                         .Configure(app => app.UseNtrada())
                         .UseLogging();
                 });

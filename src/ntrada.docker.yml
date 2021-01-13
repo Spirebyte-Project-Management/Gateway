@@ -304,3 +304,17 @@ modules:
       sprints-service:
         localUrl: localhost:5005
         url: sprints-service
+
+  operations:
+    path: operations
+    routes:
+      - upstream: /{operationId}
+        method: GET
+        use: downstream
+        downstream: operations-service/operations/{operationId}
+        auth: false
+    
+    services:
+      operations-service:
+        localUrl: localhost:5006
+        url: operations-service

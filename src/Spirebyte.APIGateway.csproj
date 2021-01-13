@@ -12,7 +12,6 @@
     <PackageReference Include="Convey.Logging" Version="0.4.354" />
     <PackageReference Include="Convey.Metrics.AppMetrics" Version="0.4.354" />
     <PackageReference Include="Convey.Security" Version="0.4.354" />
-    <PackageReference Include="LettuceEncrypt" Version="1.0.1" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
     <PackageReference Include="NetEscapades.Configuration.Yaml" Version="2.0.0" />
     <PackageReference Include="Partytitan.Ntrada" Version="1.0.0" />
@@ -37,6 +36,11 @@
 
   <ItemGroup>
     <Content Include="Certs\**" CopyToPublishDirectory="Always" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\ui\js\app.js" />
+    <None Include="wwwroot\ui\js\signalr.js" />
   </ItemGroup>
 
 </Project>

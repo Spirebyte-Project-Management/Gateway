@@ -228,10 +228,10 @@ modules:
         downstream: issues-service/issues
         auth: true
 
-      - upstream: /comment
+      - upstream: /comments
         method: POST
         use: downstream
-        downstream: issues-service/issues/comment
+        downstream: issues-service/issues/comments
         auth: true
 
       - upstream: /{issueId}

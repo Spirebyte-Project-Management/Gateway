@@ -131,6 +131,12 @@ modules:
   projects:
     path: projects
     routes:
+      - upstream: /permissionScheme/{id}
+        method: GET
+        use: downstream
+        downstream: projects-service/projects/permissionScheme/{id}
+        auth: true
+
       - upstream: /
         method: GET
         use: downstream
@@ -180,6 +186,32 @@ modules:
         auth: true
         bind:
           - id:{id}
+    services:
+      projects-service:
+        localUrl: localhost:5001
+        url: projects-service
+
+  projectGroups:
+    path: projectGroups
+    routes:
+      - upstream: /
+        method: GET
+        use: downstream
+        downstream: projects-service/projectGroups
+        auth: true
+
+      - upstream: /{id}
+        method: GET
+        use: downstream
+        downstream: projects-service/projectGroups/{id}
+        auth: true
+
+      - upstream: /
+        method: POST
+        use: downstream
+        downstream: projects-service/projectGroups
+        auth: true
+
     services:
       projects-service:
         localUrl: localhost:5001

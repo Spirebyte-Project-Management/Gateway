@@ -18,7 +18,7 @@ generateTraceId: true
 useLocalUrl: false
 loadBalancer:
   enabled: false
-  url: fabio:9999
+  url: spirebyte-fabio:9999
 
 extensions:
   customErrors:
@@ -59,7 +59,7 @@ extensions:
     enabled: true
     connectionName: api-gateway
     hostnames:
-      - rabbitmq
+      - spirebyte-rabbitmq
     port: 5672
     virtualHost: /
     username: guest
@@ -82,7 +82,7 @@ extensions:
 
   tracing:
     serviceName: api-gateway
-    udpHost: jaeger
+    udpHost: spirebyte-jaeger
     udpPort: 6831
     maxPacketSize: 0
     sampler: const
@@ -148,21 +148,23 @@ modules:
         responseHeaders:
           content-type: application/json
 
+      - upstream: /refresh-tokens/use
+        method: POST
+        use: downstream
+        downstream: identity-service/refresh-tokens/use
+        auth: false
+        responseHeaders:
+          content-type: application/json
+
     services:
       identity-service:
         localUrl: localhost:5004
-        url: identity-service
+        url: spirebyte-identity-service
 
 
   projects:
     path: projects
     routes:
-      - upstream: /permissionScheme/{id}
-        method: GET
-        use: downstream
-        downstream: projects-service/projects/permissionScheme/{id}
-        auth: true
-
       - upstream: /
         method: GET
         use: downstream
@@ -216,7 +218,40 @@ modules:
     services:
       projects-service:
         localUrl: localhost:5001
-        url: projects-service
+        url: spirebyte-projects-service
+
+  permissionSchemes:
+    path: permissionSchemes
+    routes: 
+      - upstream: /
+        methods:
+          - GET
+        matchAll: true
+        use: downstream
+        downstream: projects-service/permissionSchemes
+        auth: true
+      - upstream: /{projectId}
+        method: POST
+        use: downstream
+        downstream: projects-service/permissionSchemes/{projectId}
+        auth: true
+        resourceId:
+          property: id
+          generate: true
+      - upstream: /{id}
+        method: PUT
+        use: downstream
+        downstream: projects-service/permissionSchemes/{id}
+        auth: true
+      - upstream: /{id}
+        method: DELETE
+        use: downstream
+        downstream: projects-service/permissionSchemes/{id}
+        auth: true
+    services:
+      projects-service:
+        localUrl: localhost:5001
+        url: spirebyte-projects-service
 
   projectGroups:
     path: projectGroups
@@ -233,6 +268,12 @@ modules:
         downstream: projects-service/projectGroups/{id}
         auth: true
 
+      - upstream: /{id}
+        method: PUT
+        use: downstream
+        downstream: projects-service/projectGroups/{id}
+        auth: true
+
       - upstream: /
         method: POST
         use: downstream
@@ -242,10 +283,16 @@ modules:
           property: projectGroupId
           generate: true
 
+      - upstream: /{id}
+        method: DELETE
+        use: downstream
+        downstream: projects-service/projectGroups/{id}
+        auth: true
+
     services:
       projects-service:
         localUrl: localhost:5001
-        url: projects-service
+        url: spirebyte-projects-service
 
   issues:
     path: issues
@@ -289,7 +336,7 @@ modules:
     services:
       issues-service:
         localUrl: localhost:5003
-        url: issues-service
+        url: spirebyte-issues-service
 
   sprints:
     path: sprints
@@ -345,7 +392,7 @@ modules:
     services:
       sprints-service:
         localUrl: localhost:5005
-        url: sprints-service
+        url: spirebyte-sprints-service
 
   operations:
     path: operations
@@ -359,4 +406,4 @@ modules:
     services:
       operations-service:
         localUrl: localhost:5006
-        url: operations-service
+        url: spirebyte-operations-service

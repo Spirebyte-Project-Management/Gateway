@@ -122,6 +122,14 @@ modules:
         auth: false
         responseHeaders:
           content-type: application/json
+
+      - upstream: /refresh-tokens/use
+        method: POST
+        use: downstream
+        downstream: identity-service/refresh-tokens/use
+        auth: false
+        responseHeaders:
+          content-type: application/json
     
     services:
       identity-service:
@@ -131,12 +139,6 @@ modules:
   projects:
     path: projects
     routes:
-      - upstream: /permissionScheme/{id}
-        method: GET
-        use: downstream
-        downstream: projects-service/projects/permissionScheme/{id}
-        auth: true
-
       - upstream: /
         method: GET
         use: downstream
@@ -191,6 +193,39 @@ modules:
         localUrl: localhost:5001
         url: projects-service
 
+  permissionSchemes:
+    path: permissionSchemes
+    routes: 
+      - upstream: /
+        methods:
+          - GET
+        matchAll: true
+        use: downstream
+        downstream: projects-service/permissionSchemes
+        auth: true
+      - upstream: /{projectId}
+        method: POST
+        use: downstream
+        downstream: projects-service/permissionSchemes/{projectId}
+        auth: true
+        resourceId:
+          property: id
+          generate: true
+      - upstream: /{id}
+        method: PUT
+        use: downstream
+        downstream: projects-service/permissionSchemes/{id}
+        auth: true
+      - upstream: /{id}
+        method: DELETE
+        use: downstream
+        downstream: projects-service/permissionSchemes/{id}
+        auth: true
+    services:
+      projects-service:
+        localUrl: localhost:5001
+        url: projects-service
+
   projectGroups:
     path: projectGroups
     routes:
@@ -205,11 +240,26 @@ modules:
         use: downstream
         downstream: projects-service/projectGroups/{id}
         auth: true
+      
+      - upstream: /{id}
+        method: PUT
+        use: downstream
+        downstream: projects-service/projectGroups/{id}
+        auth: true
 
       - upstream: /
         method: POST
         use: downstream
         downstream: projects-service/projectGroups
+        auth: true
+        resourceId:
+          property: projectGroupId
+          generate: true
+
+      - upstream: /{id}
+        method: DELETE
+        use: downstream
+        downstream: projects-service/projectGroups/{id}
         auth: true
 
     services:

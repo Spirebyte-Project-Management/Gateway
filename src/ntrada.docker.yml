@@ -107,16 +107,16 @@ modules:
         downstream: identity-service/users
         auth: true
     
-      - upstream: /me
+      - upstream: /profile
         method: GET
         use: downstream
-        downstream: identity-service/me
+        downstream: identity-service/profile
         auth: true
 
-      - upstream: /me
+      - upstream: /profile
         method: PUT
         use: downstream
-        downstream: identity-service/me
+        downstream: identity-service/profile
         auth: true
 
       - upstream: /forgot-password
@@ -148,13 +148,13 @@ modules:
         responseHeaders:
           content-type: application/json
 
-      - upstream: /refresh-tokens/use
-        method: POST
+      - upstream: /refresh-tokens
+        methods:
+          - POST
+        matchAll: true
         use: downstream
-        downstream: identity-service/refresh-tokens/use
+        downstream: identity-service/refresh-tokens
         auth: false
-        responseHeaders:
-          content-type: application/json
 
     services:
       identity-service:

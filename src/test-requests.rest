@@ -1,4 +1,5 @@
-﻿@api = http://localhost:5000
+﻿//@api = http://localhost:5000
+@api = https://api.spirebyte.nl
 
 ### At first, create an account
 POST {{api}}/identity/sign-up HTTP/1.1
@@ -37,6 +38,14 @@ Authorization: Bearer {{accessToken}}
 {
 "fullname": "Admintest1"
 }
+
+@projectId = 'wnr-i'
+
+### get project
+GET {{api}}/projects/{projectId} HTTP/1.1
+content-type: application/json
+Authorization: Bearer {{accessToken}}
+
 
 ### create project
 POST {{api}}/projects HTTP/1.1

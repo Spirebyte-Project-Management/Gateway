@@ -6,7 +6,10 @@ POST {{api}}/identity/sign-up HTTP/1.1
 content-type: application/json
 
 {
-"email": "spirebyte-user1@mailinator.com", "fullname": "Test user", "password": "secret", "role": "user"
+  "email": "spirebyte-user1@mailinator.com",
+  "fullname": "Test user",
+  "password": "secret",
+  "role": "user"
 }
 
 ### Authenticate and grab the access token 
@@ -15,7 +18,8 @@ POST {{api}}/identity/sign-in HTTP/1.1
 Content-Type: application/json
 
 {
-"email": "spirebyte-user1@mailinator.com", "password": "secret"
+  "email": "spirebyte-user1@mailinator.com",
+  "password": "secret"
 }
 
 ### forgot password
@@ -23,11 +27,11 @@ POST {{api}}/identity/forgot-password HTTP/1.1
 content-type: application/json
 
 {
-"email": "spirebyte-user1@mailinator.com"
+  "email": "spirebyte-user1@mailinator.com"
 }
 
 ### Get your user account details 
-@accessToken = {{sign_in.response.body.$.accessToken}} 
+@accessToken = {{sign_in.response.body.$.accessToken}}
 GET {{api}}/identity/me HTTP/1.1
 Authorization: Bearer {{accessToken}}
 
@@ -53,5 +57,5 @@ content-type: application/json
 Authorization: Bearer {{accessToken}}
 
 {
-"title": "Test title"
+  "title": "Test title"
 }

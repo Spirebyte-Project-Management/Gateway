@@ -106,7 +106,7 @@ modules:
         use: downstream
         downstream: identity-service/users
         auth: true
-    
+
       - upstream: /profile
         method: GET
         use: downstream
@@ -139,7 +139,7 @@ modules:
         resourceId:
           property: userId
           generate: true
-    
+
       - upstream: /sign-in
         method: POST
         auth: false
@@ -198,7 +198,7 @@ modules:
         use: downstream
         downstream: projects-service/projects/exists/{id}
         auth: true
-    
+
       - upstream: /
         method: POST
         use: downstream
@@ -222,7 +222,7 @@ modules:
 
   permissionSchemes:
     path: permissionSchemes
-    routes: 
+    routes:
       - upstream: /
         methods:
           - GET
@@ -230,10 +230,10 @@ modules:
         use: downstream
         downstream: projects-service/permissionSchemes
         auth: true
-      - upstream: /{projectId}
+      - upstream: /
         method: POST
         use: downstream
-        downstream: projects-service/permissionSchemes/{projectId}
+        downstream: projects-service/permissionSchemes
         auth: true
         resourceId:
           property: id
@@ -304,7 +304,7 @@ modules:
         use: downstream
         downstream: issues-service/issues
         auth: true
-    
+
       - upstream: /
         method: POST
         use: downstream
@@ -382,12 +382,28 @@ modules:
         bind:
           - sprintId:{sprintId}
           - issueId:{issueId}
-    
+
       - upstream: /
         method: POST
         use: downstream
         downstream: sprints-service/sprints
         auth: true
+
+      - upstream: /{sprintId}
+        method: PUT
+        use: downstream
+        downstream: sprints-service/sprints/{sprintId}
+        auth: true
+        bind:
+          - id:{sprintId}
+
+      - upstream: /{sprintId}
+        method: DELETE
+        use: downstream
+        downstream: sprints-service/sprints/{sprintId}
+        auth: true
+        bind:
+          - id:{sprintId}
     
     services:
       sprints-service:

@@ -69,8 +69,8 @@ modules:
       - upstream: /
         method: GET
         use: return_value
-        returnValue: Welcome to Spirebyte API!
-          
+        returnValue: Welcome to Spirebyte API!!!
+
   identity:
     path: identity
     routes:
@@ -81,17 +81,17 @@ modules:
         use: downstream
         downstream: identity-service/users
         auth: true
-    
-      - upstream: /me
+
+      - upstream: /profile
         method: GET
         use: downstream
-        downstream: identity-service/me
+        downstream: identity-service/profile
         auth: true
 
-      - upstream: /me
+      - upstream: /profile
         method: PUT
         use: downstream
-        downstream: identity-service/me
+        downstream: identity-service/profile
         auth: true
 
       - upstream: /forgot-password
@@ -105,7 +105,7 @@ modules:
         use: downstream
         downstream: identity-service/reset-password
         auth: false
-    
+
       - upstream: /sign-up
         method: POST
         use: downstream
@@ -114,27 +114,28 @@ modules:
         resourceId:
           property: userId
           generate: true
-    
+
       - upstream: /sign-in
         method: POST
+        auth: false
         use: downstream
         downstream: identity-service/sign-in
-        auth: false
         responseHeaders:
           content-type: application/json
 
-      - upstream: /refresh-tokens/use
-        method: POST
+      - upstream: /refresh-tokens
+        methods:
+          - POST
+        matchAll: true
         use: downstream
-        downstream: identity-service/refresh-tokens/use
+        downstream: identity-service/refresh-tokens
         auth: false
-        responseHeaders:
-          content-type: application/json
-    
+
     services:
       identity-service:
         localUrl: localhost:5004
-        url: identity-service
+        url: spirebyte-identity-service
+
 
   projects:
     path: projects
@@ -157,7 +158,7 @@ modules:
         downstream: projects-service/projects/{id}/join
         auth: true
         bind:
-          - projectId:{id}
+          - id:{id}
 
       - upstream: /{id}/leave
         method: POST
@@ -165,14 +166,14 @@ modules:
         downstream: projects-service/projects/{id}/leave
         auth: true
         bind:
-          - projectId:{id}
+          - id:{id}
 
       - upstream: /exists/{id}
         method: GET
         use: downstream
         downstream: projects-service/projects/exists/{id}
         auth: true
-    
+
       - upstream: /
         method: POST
         use: downstream
@@ -188,14 +189,15 @@ modules:
         auth: true
         bind:
           - id:{id}
+
     services:
       projects-service:
         localUrl: localhost:5001
-        url: projects-service
+        url: spirebyte-projects-service
 
   permissionSchemes:
     path: permissionSchemes
-    routes: 
+    routes:
       - upstream: /
         methods:
           - GET
@@ -203,10 +205,10 @@ modules:
         use: downstream
         downstream: projects-service/permissionSchemes
         auth: true
-      - upstream: /{projectId}
+      - upstream: /
         method: POST
         use: downstream
-        downstream: projects-service/permissionSchemes/{projectId}
+        downstream: projects-service/permissionSchemes
         auth: true
         resourceId:
           property: id
@@ -224,7 +226,7 @@ modules:
     services:
       projects-service:
         localUrl: localhost:5001
-        url: projects-service
+        url: spirebyte-projects-service
 
   projectGroups:
     path: projectGroups
@@ -240,7 +242,7 @@ modules:
         use: downstream
         downstream: projects-service/projectGroups/{id}
         auth: true
-      
+
       - upstream: /{id}
         method: PUT
         use: downstream
@@ -265,7 +267,7 @@ modules:
     services:
       projects-service:
         localUrl: localhost:5001
-        url: projects-service
+        url: spirebyte-projects-service
 
   issues:
     path: issues
@@ -277,7 +279,7 @@ modules:
         use: downstream
         downstream: issues-service/issues
         auth: true
-    
+
       - upstream: /
         method: POST
         use: downstream
@@ -309,7 +311,7 @@ modules:
     services:
       issues-service:
         localUrl: localhost:5003
-        url: issues-service
+        url: spirebyte-issues-service
 
   sprints:
     path: sprints
@@ -355,17 +357,33 @@ modules:
         bind:
           - sprintId:{sprintId}
           - issueId:{issueId}
-    
+
       - upstream: /
         method: POST
         use: downstream
         downstream: sprints-service/sprints
         auth: true
+
+      - upstream: /{sprintId}
+        method: PUT
+        use: downstream
+        downstream: sprints-service/sprints/{sprintId}
+        auth: true
+        bind:
+          - id:{sprintId}
+
+      - upstream: /{sprintId}
+        method: DELETE
+        use: downstream
+        downstream: sprints-service/sprints/{sprintId}
+        auth: true
+        bind:
+          - id:{sprintId}
     
     services:
       sprints-service:
         localUrl: localhost:5005
-        url: sprints-service
+        url: spirebyte-sprints-service
 
   operations:
     path: operations
@@ -379,4 +397,4 @@ modules:
     services:
       operations-service:
         localUrl: localhost:5006
-        url: operations-service
+        url: spirebyte-operations-service

@@ -1,46 +1,47 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
-  <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
-    <DockerComposeProjectPath>..\..\..\docker-compose.dcproj</DockerComposeProjectPath>
-    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-    <DockerfileContext>..\..\..</DockerfileContext>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <DockerComposeProjectPath>..\..\..\docker-compose.dcproj</DockerComposeProjectPath>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+        <DockerfileContext>..\..\..</DockerfileContext>
+        <LangVersion>latestmajor</LangVersion>
+    </PropertyGroup>
 
 
-  <ItemGroup>
-    <PackageReference Include="Convey.Logging" Version="0.4.354" />
-    <PackageReference Include="Convey.Metrics.AppMetrics" Version="0.4.354" />
-    <PackageReference Include="Convey.Security" Version="0.4.354" />
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
-    <PackageReference Include="NetEscapades.Configuration.Yaml" Version="2.0.0" />
-    <PackageReference Include="Partytitan.Ntrada" Version="1.0.0" />
-    <PackageReference Include="Partytitan.Ntrada.Extensions.Cors" Version="1.0.0" />
-    <PackageReference Include="Partytitan.Ntrada.Extensions.CustomErrors" Version="1.0.0" />
-    <PackageReference Include="Partytitan.Ntrada.Extensions.Jwt" Version="1.0.0" />
-    <PackageReference Include="Partytitan.Ntrada.Extensions.RabbitMq" Version="1.0.0" />
-    <PackageReference Include="Partytitan.Ntrada.Extensions.Swagger" Version="1.0.0" />
-    <PackageReference Include="Partytitan.Ntrada.Extensions.Tracing" Version="1.0.0" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Convey.Logging" Version="0.4.354"/>
+        <PackageReference Include="Convey.Metrics.AppMetrics" Version="0.4.354"/>
+        <PackageReference Include="Convey.Security" Version="0.4.354"/>
+        <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9"/>
+        <PackageReference Include="NetEscapades.Configuration.Yaml" Version="2.0.0"/>
+        <PackageReference Include="Partytitan.Ntrada" Version="1.0.0"/>
+        <PackageReference Include="Partytitan.Ntrada.Extensions.Cors" Version="1.0.0"/>
+        <PackageReference Include="Partytitan.Ntrada.Extensions.CustomErrors" Version="1.0.0"/>
+        <PackageReference Include="Partytitan.Ntrada.Extensions.Jwt" Version="1.0.0"/>
+        <PackageReference Include="Partytitan.Ntrada.Extensions.RabbitMq" Version="1.0.0"/>
+        <PackageReference Include="Partytitan.Ntrada.Extensions.Swagger" Version="1.0.0"/>
+        <PackageReference Include="Partytitan.Ntrada.Extensions.Tracing" Version="1.0.0"/>
+    </ItemGroup>
 
-  <ItemGroup>
-    <None Remove="Certs\cloudflare.pfx" />
-    <None Remove="ntrada.yml" />
-    <Content Include="ntrada.docker.yml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="ntrada.yml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
+    <ItemGroup>
+        <None Remove="Certs\cloudflare.pfx"/>
+        <None Remove="ntrada.yml"/>
+        <Content Include="ntrada.docker.yml">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <Content Include="ntrada.yml">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
 
-  <ItemGroup>
-    <Content Include="Certs\**" CopyToPublishDirectory="Always" />
-  </ItemGroup>
+    <ItemGroup>
+        <Content Include="Certs\**" CopyToPublishDirectory="Always"/>
+    </ItemGroup>
 
-  <ItemGroup>
-    <None Include="wwwroot\ui\js\app.js" />
-    <None Include="wwwroot\ui\js\signalr.js" />
-  </ItemGroup>
+    <ItemGroup>
+        <None Include="wwwroot\ui\js\app.js"/>
+        <None Include="wwwroot\ui\js\signalr.js"/>
+    </ItemGroup>
 
 </Project>

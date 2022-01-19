@@ -1,5 +1,5 @@
 'use strict';
-(function() {
+(function () {
     const $jwt = document.getElementById("jwt");
     const $connect = document.getElementById("connect");
     const $messages = document.getElementById("messages");
@@ -8,9 +8,9 @@
         .configureLogging(signalR.LogLevel.Information)
         .build();
 
-    $connect.onclick = function() {
+    $connect.onclick = function () {
         const jwt = $jwt.value;
-        if (!jwt || /\s/g.test(jwt)){
+        if (!jwt || /\s/g.test(jwt)) {
             alert('Invalid JWT.');
             return;
         }
@@ -18,11 +18,11 @@
         appendMessage("Connecting to Spirebyte Hub...");
         connection.start()
             .then(() => {
-            connection.invoke('initializeAsync', $jwt.value);
-        })
-        .catch(err => appendMessage(err));
+                connection.invoke('initializeAsync', $jwt.value);
+            })
+            .catch(err => appendMessage(err));
     }
-    
+
     connection.on('connected', _ => {
         appendMessage("Connected.", "primary");
     });
@@ -42,7 +42,7 @@
     connection.on('operation_rejected', (operation) => {
         appendMessage('Operation rejected.', "danger", operation);
     });
-    
+
     function appendMessage(message, type, data) {
         var dataInfo = "";
         if (data) {

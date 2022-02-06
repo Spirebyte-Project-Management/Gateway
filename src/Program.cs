@@ -1,22 +1,13 @@
-using System;
-using System.Linq;
 using System.Threading.Tasks;
-using Convey;
 using Convey.Logging;
-using Convey.Security;
+using Convey.Secrets.Vault;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Ntrada;
-using Ntrada.Extensions.RabbitMq;
-using Ntrada.Hooks;
-using Spirebyte.APIGateway.Infrastructure;
 
 namespace Spirebyte.APIGateway;
 
 public class Program
-{ 
+{
     public static Task Main(string[] args)
     {
         return CreateHostBuilder(args).Build().RunAsync();
@@ -25,28 +16,8 @@ public class Program
     public static IHostBuilder CreateHostBuilder(string[] args)
     {
         return Host.CreateDefaultBuilder(args)
-            .ConfigureWebHostDefaults(webBuilder =>
-            {
-                webBuilder.ConfigureAppConfiguration(builder =>
-                    {
-                        const string extension = "yml";
-                        var ntradaConfig = Environment.GetEnvironmentVariable("NTRADA_CONFIG");
-                        var configPath = args?.FirstOrDefault() ?? ntradaConfig ?? $"ntrada.{extension}";
-                        if (!configPath.EndsWith($".{extension}")) configPath += $".{extension}";
-
-                        builder.AddYamlFile(configPath, false);
-                    })
-                    .ConfigureServices(services =>
-                    {
-                        services.AddNtrada()
-                            .AddSingleton<IContextBuilder, CorrelationContextBuilder>()
-                            .AddSingleton<ISpanContextBuilder, SpanContextBuilder>()
-                            .AddSingleton<IHttpRequestHook, HttpRequestHook>()
-                            .AddConvey()
-                            .AddSecurity();
-                    })
-                    .Configure(app => app.UseNtrada())
-                    .UseLogging();
-            });
+            .ConfigureWebHostDefaults(webBuilder => webBuilder.UseStartup<Startup>())
+            .UseLogging()
+            .UseVault();
     }
 }

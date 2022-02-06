@@ -10,18 +10,17 @@
 
 
     <ItemGroup>
-        <PackageReference Include="Convey.Logging" Version="0.4.354"/>
-        <PackageReference Include="Convey.Metrics.AppMetrics" Version="0.4.354"/>
-        <PackageReference Include="Convey.Security" Version="0.4.354"/>
-        <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9"/>
-        <PackageReference Include="NetEscapades.Configuration.Yaml" Version="2.0.0"/>
-        <PackageReference Include="Partytitan.Ntrada" Version="1.0.0"/>
-        <PackageReference Include="Partytitan.Ntrada.Extensions.Cors" Version="1.0.0"/>
-        <PackageReference Include="Partytitan.Ntrada.Extensions.CustomErrors" Version="1.0.0"/>
-        <PackageReference Include="Partytitan.Ntrada.Extensions.Jwt" Version="1.0.0"/>
-        <PackageReference Include="Partytitan.Ntrada.Extensions.RabbitMq" Version="1.0.0"/>
-        <PackageReference Include="Partytitan.Ntrada.Extensions.Swagger" Version="1.0.0"/>
-        <PackageReference Include="Partytitan.Ntrada.Extensions.Tracing" Version="1.0.0"/>
+        <PackageReference Include="Convey.Auth" Version="1.0.*"/>
+        <PackageReference Include="Convey.HTTP" Version="1.0.*"/>
+        <PackageReference Include="Convey.Logging" Version="1.0.*"/>
+        <PackageReference Include="Convey.MessageBrokers.CQRS" Version="1.0.*"/>
+        <PackageReference Include="Convey.MessageBrokers.RabbitMQ" Version="1.0.*"/>
+        <PackageReference Include="Convey.Metrics.Prometheus" Version="1.0.*"/>
+        <PackageReference Include="Convey.Secrets.Vault" Version="1.0.*"/>
+        <PackageReference Include="Convey.Security" Version="1.0.*"/>
+        <PackageReference Include="Convey.Tracing.Jaeger" Version="1.0.*"/>
+        <PackageReference Include="Convey.Tracing.Jaeger.RabbitMQ" Version="1.0.*"/>
+        <PackageReference Include="Yarp.ReverseProxy" Version="1.0.0"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -37,11 +36,6 @@
 
     <ItemGroup>
         <Content Include="Certs\**" CopyToPublishDirectory="Always"/>
-    </ItemGroup>
-
-    <ItemGroup>
-        <None Include="wwwroot\ui\js\app.js"/>
-        <None Include="wwwroot\ui\js\signalr.js"/>
     </ItemGroup>
 
 </Project>

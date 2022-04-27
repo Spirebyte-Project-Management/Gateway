@@ -10,6 +10,7 @@
 
 
     <ItemGroup>
+        <PackageReference Include="Consul" Version="1.6.10.4" />
         <PackageReference Include="Convey.Auth" Version="1.0.*" />
         <PackageReference Include="Convey.HTTP" Version="1.0.*" />
         <PackageReference Include="Convey.Logging" Version="1.0.*" />
@@ -20,7 +21,7 @@
         <PackageReference Include="Convey.Security" Version="1.0.*" />
         <PackageReference Include="Convey.Tracing.Jaeger" Version="1.0.*" />
         <PackageReference Include="Convey.Tracing.Jaeger.RabbitMQ" Version="1.0.*" />
-        <PackageReference Include="Yarp.ReverseProxy" Version="1.0.0" />
+        <PackageReference Include="Yarp.ReverseProxy" Version="1.1.0-rc.1.22211.2" />
     </ItemGroup>
 
     <ItemGroup>

@@ -17,6 +17,8 @@ using Spirebyte.APIGateway.Correlation;
 using Spirebyte.APIGateway.Identity;
 using Spirebyte.APIGateway.Messaging;
 using Spirebyte.APIGateway.Serialization;
+using Spirebyte.APIGateway.ServiceDiscovery;
+using Yarp.ReverseProxy.Configuration;
 using Yarp.ReverseProxy.Transforms;
 
 namespace Spirebyte.APIGateway;
@@ -109,6 +111,8 @@ public class Startup
                     return ValueTask.CompletedTask;
                 });
             });
+
+        services.AddConsul(_configuration);
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -130,6 +134,16 @@ public class Startup
         app.UseEndpoints(endpoints =>
         {
             endpoints.MapGet("/", context => context.Response.WriteAsync(_appName));
+            endpoints.MapGet("/routes", context =>
+            {
+                var proxyConfigProvider = context.RequestServices.GetService<IProxyConfigProvider>();
+                return context.Response.WriteAsJsonAsync(proxyConfigProvider?.GetConfig().Routes);
+            });
+            endpoints.MapGet("/clusters", context =>
+            {
+                var proxyConfigProvider = context.RequestServices.GetService<IProxyConfigProvider>();
+                return context.Response.WriteAsJsonAsync(proxyConfigProvider?.GetConfig().Clusters);
+            });
             endpoints.MapReverseProxy();
         });
     }

@@ -60,7 +60,7 @@ public class ConsulRouteMonitorWorker : BackgroundService, IProxyConfigProvider
             
             var clusterConfig = new ClusterConfig
             {
-                ClusterId = svc.Service,
+                ClusterId = $"{svc.Service}-cluster",
                 LoadBalancingPolicy = LoadBalancingPolicies.RoundRobin,
                 Destinations = destinations
             };
@@ -95,7 +95,7 @@ public class ConsulRouteMonitorWorker : BackgroundService, IProxyConfigProvider
 
                 var route = new RouteConfig
                 {
-                    ClusterId = svc.Service,
+                    ClusterId = $"{svc.Service}-cluster",
                     RouteId = $"{svc.Service}-route",
                     Match = new()
                     {

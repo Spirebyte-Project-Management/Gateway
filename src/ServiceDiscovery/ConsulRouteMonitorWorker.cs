@@ -56,7 +56,7 @@ public class ConsulRouteMonitorWorker : BackgroundService, IProxyConfigProvider
             var destinations = clusters.GetValueOrDefault(svc.Service)?.Destinations?.ToDictionary(kvp => kvp.Key, kvp => kvp.Value) ??
                                new Dictionary<string, DestinationConfig>();
 
-            destinations.Add(svc.ID, new DestinationConfig() { Address = $"{svc.Address}:{svc.Port}" });
+            destinations.Add(svc.ID, new DestinationConfig() { Address = $"http://{svc.Address}:{svc.Port}" });
             
             var clusterConfig = new ClusterConfig
             {

@@ -16,6 +16,7 @@
         <PackageReference Include="Convey.Logging" Version="1.0.*" />
         <PackageReference Include="Convey.MessageBrokers.CQRS" Version="1.0.*" />
         <PackageReference Include="Convey.MessageBrokers.RabbitMQ" Version="1.0.*" />
+        <PackageReference Include="Convey.Metrics.AppMetrics" Version="1.0.531" />
         <PackageReference Include="Convey.Metrics.Prometheus" Version="1.0.*" />
         <PackageReference Include="Convey.Secrets.Vault" Version="1.0.*" />
         <PackageReference Include="Convey.Security" Version="1.0.*" />

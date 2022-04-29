@@ -3,6 +3,7 @@ using Convey;
 using Convey.Auth;
 using Convey.HTTP;
 using Convey.MessageBrokers.RabbitMQ;
+using Convey.Metrics.AppMetrics;
 using Convey.Security;
 using Convey.Tracing.Jaeger;
 using Convey.Tracing.Jaeger.RabbitMQ;
@@ -13,6 +14,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using OpenTracing;
+using Prometheus;
 using Spirebyte.APIGateway.Correlation;
 using Spirebyte.APIGateway.Identity;
 using Spirebyte.APIGateway.Messaging;
@@ -40,6 +42,7 @@ public class Startup
             .AddConvey()
             .AddJaeger()
             .AddJwt()
+            .AddMetrics()
             .AddRabbitMq(plugins: p => p.AddJaegerRabbitMqPlugin())
             .AddSecurity()
             .Build();
@@ -130,6 +133,7 @@ public class Startup
         app.UseMiddleware<MessagingMiddleware>();
         app.UseRouting();
         app.UseAuthorization();
+        app.UseMetrics();
 
         app.UseEndpoints(endpoints =>
         {

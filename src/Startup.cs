@@ -45,7 +45,7 @@ public class Startup
     {
         services
             .AddConvey()
-            .AddIdentityServerAuthentication()
+            .AddIdentityServerAuthentication(withBasic: true)
             .AddJaeger()
             .AddMetrics()
             .AddRabbitMq(plugins: p => p.AddJaegerRabbitMqPlugin())

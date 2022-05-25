@@ -1,16 +1,11 @@
 ﻿using System.Threading.Tasks;
 using Convey;
-using Convey.Auth;
 using Convey.HTTP;
 using Convey.MessageBrokers.RabbitMQ;
 using Convey.Metrics.AppMetrics;
 using Convey.Security;
 using Convey.Tracing.Jaeger;
 using Convey.Tracing.Jaeger.RabbitMQ;
-using IdentityModel;
-using IdentityModel.AspNetCore.AccessTokenValidation;
-using IdentityModel.AspNetCore.OAuth2Introspection;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -18,9 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using OpenTracing;
-using Prometheus;
 using Spirebyte.APIGateway.Correlation;
-using Spirebyte.APIGateway.Identity;
 using Spirebyte.APIGateway.Messaging;
 using Spirebyte.APIGateway.Serialization;
 using Spirebyte.APIGateway.ServiceDiscovery;
@@ -53,7 +46,6 @@ public class Startup
             .Build();
 
         services.AddScoped<LogContextMiddleware>();
-        services.AddScoped<UserMiddleware>();
         services.AddScoped<MessagingMiddleware>();
         services.AddSingleton<IJsonSerializer, SystemTextJsonSerializer>();
         services.AddSingleton<ICorrelationIdFactory, CorrelationIdFactory>();
@@ -135,7 +127,6 @@ public class Startup
         app.UseConvey();
         app.UseAuthentication();
         app.UseRabbitMq();
-        app.UseMiddleware<UserMiddleware>();
         app.UseMiddleware<MessagingMiddleware>();
         app.UseRouting();
         app.UseAuthorization();

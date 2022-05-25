@@ -22,6 +22,8 @@
         <PackageReference Include="Convey.Security" Version="1.0.*" />
         <PackageReference Include="Convey.Tracing.Jaeger" Version="1.0.*" />
         <PackageReference Include="Convey.Tracing.Jaeger.RabbitMQ" Version="1.0.*" />
+        <PackageReference Include="IdentityModel.AspNetCore.AccessTokenValidation" Version="1.0.0-preview.3" />
+        <PackageReference Include="IdentityModel.AspNetCore.OAuth2Introspection" Version="6.0.0" />
         <PackageReference Include="Yarp.ReverseProxy" Version="1.1.0-rc.1.22211.2" />
     </ItemGroup>
 
@@ -32,6 +34,10 @@
 
     <ItemGroup>
         <Content Include="Certs\**" CopyToPublishDirectory="Always" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\Shared\src\Spirebyte.Shared\Spirebyte.Shared.csproj" />
     </ItemGroup>
 
 </Project>

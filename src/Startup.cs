@@ -7,6 +7,10 @@ using Convey.Metrics.AppMetrics;
 using Convey.Security;
 using Convey.Tracing.Jaeger;
 using Convey.Tracing.Jaeger.RabbitMQ;
+using IdentityModel;
+using IdentityModel.AspNetCore.AccessTokenValidation;
+using IdentityModel.AspNetCore.OAuth2Introspection;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -20,6 +24,7 @@ using Spirebyte.APIGateway.Identity;
 using Spirebyte.APIGateway.Messaging;
 using Spirebyte.APIGateway.Serialization;
 using Spirebyte.APIGateway.ServiceDiscovery;
+using Spirebyte.Shared.IdentityServer;
 using Yarp.ReverseProxy.Configuration;
 using Yarp.ReverseProxy.Transforms;
 
@@ -40,8 +45,8 @@ public class Startup
     {
         services
             .AddConvey()
+            .AddIdentityServerAuthentication()
             .AddJaeger()
-            .AddJwt()
             .AddMetrics()
             .AddRabbitMq(plugins: p => p.AddJaegerRabbitMqPlugin())
             .AddSecurity()
@@ -59,8 +64,10 @@ public class Startup
 
         services.AddAuthorization(options =>
         {
-            options.AddPolicy("authenticatedUser", policy =>
-                policy.RequireAuthenticatedUser());
+            options.AddPolicy("ApiScope", policy =>
+            {
+                policy.RequireAuthenticatedUser();
+            });
         });
 
         services.AddCors(cors =>
@@ -126,7 +133,6 @@ public class Startup
         app.UseMiddleware<LogContextMiddleware>();
         app.UseCors("cors");
         app.UseConvey();
-        app.UseAccessTokenValidator();
         app.UseAuthentication();
         app.UseRabbitMq();
         app.UseMiddleware<UserMiddleware>();

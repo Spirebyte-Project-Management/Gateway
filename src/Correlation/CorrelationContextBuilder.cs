@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using IdentityModel;
 using Microsoft.AspNetCore.Http;
 
 namespace Spirebyte.APIGateway.Correlation;
@@ -23,7 +24,7 @@ internal sealed class CorrelationContextBuilder : ICorrelationContextBuilder
             User = context.User.Identity is not null
                 ? new CorrelationContext.UserContext
                 {
-                    Id = context.User.Identity.Name,
+                    Id = context.User.Claims.FirstOrDefault(c => c.Type == JwtClaimTypes.Subject)?.Value,
                     IsAuthenticated = context.User.Identity.IsAuthenticated,
                     Role = context.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value,
                     Claims = context.User.Claims.GroupBy(x => x.Type)

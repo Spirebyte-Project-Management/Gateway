@@ -101,6 +101,7 @@ public class ConsulRouteMonitorWorker : BackgroundService, IProxyConfigProvider
                 {
                     ClusterId = $"{svc.Service}-cluster",
                     RouteId = $"{svc.Service}-route",
+                    AuthorizationPolicy = "ApiScope",
                     Match = new RouteMatch
                     {
                         Path = svc.Meta.ContainsKey("yarp_path") ? svc.Meta["yarp_path"] : default

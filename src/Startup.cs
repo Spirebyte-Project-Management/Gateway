@@ -56,10 +56,7 @@ public class Startup
 
         services.AddAuthorization(options =>
         {
-            options.AddPolicy("ApiScope", policy =>
-            {
-                policy.RequireAuthenticatedUser();
-            });
+            options.AddPolicy("ApiScope", policy => { policy.RequireAuthenticatedUser(); });
         });
 
         services.AddCors(cors =>

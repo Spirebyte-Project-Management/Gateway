@@ -15,18 +15,24 @@ namespace Spirebyte.APIGateway.ServiceDiscovery;
 
 public class ConsulRouteMonitorWorker : BackgroundService, IProxyConfigProvider
 {
-    private readonly IConsulClient _consulClient;        
-    private readonly IConfigValidator _proxyConfigValidator;
+    private const int DEFAULT_CONSUL_POLL_INTERVAL_MINS = 2;
+    private readonly IConsulClient _consulClient;
     private readonly ILogger<ConsulRouteMonitorWorker> _logger;
+    private readonly IConfigValidator _proxyConfigValidator;
     private volatile ConsulProxyConfig _config;
-    private const int DEFAULT_CONSUL_POLL_INTERVAL_MINS = 2;        
 
-    public ConsulRouteMonitorWorker(IConsulClient consulClient, IConfigValidator proxyConfigValidator, ILogger<ConsulRouteMonitorWorker> logger)
+    public ConsulRouteMonitorWorker(IConsulClient consulClient, IConfigValidator proxyConfigValidator,
+        ILogger<ConsulRouteMonitorWorker> logger)
     {
         _consulClient = consulClient;
-        _config = new ConsulProxyConfig(null, null);            
+        _config = new ConsulProxyConfig(null, null);
         _proxyConfigValidator = proxyConfigValidator;
         _logger = logger;
+    }
+
+    public IProxyConfig GetConfig()
+    {
+        return _config;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -53,11 +59,12 @@ public class ConsulRouteMonitorWorker : BackgroundService, IProxyConfigProvider
         var serviceMapping = serviceResult.Response;
         foreach (var (key, svc) in serviceMapping)
         {
-            var destinations = clusters.GetValueOrDefault(svc.Service)?.Destinations?.ToDictionary(kvp => kvp.Key, kvp => kvp.Value) ??
+            var destinations = clusters.GetValueOrDefault(svc.Service)?.Destinations
+                                   ?.ToDictionary(kvp => kvp.Key, kvp => kvp.Value) ??
                                new Dictionary<string, DestinationConfig>();
 
-            destinations.Add(svc.ID, new DestinationConfig() { Address = $"http://{svc.Address}:{svc.Port}" });
-            
+            destinations.Add(svc.ID, new DestinationConfig { Address = $"http://{svc.Address}:{svc.Port}" });
+
             var clusterConfig = new ClusterConfig
             {
                 ClusterId = $"{svc.Service}-cluster",
@@ -70,9 +77,7 @@ public class ConsulRouteMonitorWorker : BackgroundService, IProxyConfigProvider
             {
                 _logger.LogError("Errors found when creating clusters for {Service}", svc.Service);
                 foreach (var err in clusterErrs)
-                {
                     _logger.LogError(err, "{svc.Service} cluster validation error", svc.Service);
-                }
                 continue;
             }
 
@@ -87,8 +92,7 @@ public class ConsulRouteMonitorWorker : BackgroundService, IProxyConfigProvider
         var serviceMapping = serviceResult.Response;
         var routes = new List<RouteConfig>();
         foreach (var (key, svc) in serviceMapping)
-        {
-            if (svc.Meta.TryGetValue("yarp", out string enableYarp) &&
+            if (svc.Meta.TryGetValue("yarp", out var enableYarp) &&
                 enableYarp.Equals("on", StringComparison.InvariantCulture))
             {
                 if (routes.Any(r => r.ClusterId == svc.Service)) continue;
@@ -97,13 +101,13 @@ public class ConsulRouteMonitorWorker : BackgroundService, IProxyConfigProvider
                 {
                     ClusterId = $"{svc.Service}-cluster",
                     RouteId = $"{svc.Service}-route",
-                    Match = new()
+                    Match = new RouteMatch
                     {
-                        Path = svc.Meta.ContainsKey("yarp_path")?svc.Meta["yarp_path"] : default
+                        Path = svc.Meta.ContainsKey("yarp_path") ? svc.Meta["yarp_path"] : default
                     },
-                    Transforms = new List<IReadOnlyDictionary<string, string>>()
+                    Transforms = new List<IReadOnlyDictionary<string, string>>
                     {
-                        new Dictionary<string, string>(){ { "PathPattern", "{**catchall}" }}
+                        new Dictionary<string, string> { { "PathPattern", "{**catchall}" } }
                     }
                 };
 
@@ -112,18 +116,15 @@ public class ConsulRouteMonitorWorker : BackgroundService, IProxyConfigProvider
                 {
                     _logger.LogError("Errors found when trying to generate routes for {Service}", svc.Service);
                     foreach (var err in routeErrs)
-                    {
                         _logger.LogError(err, "{svc.Service} route validation error", svc.Service);
-                    }
                     continue;
                 }
+
                 routes.Add(route);
             }
-        }
+
         return routes;
     }
-
-   public IProxyConfig GetConfig() => _config;
 
     public virtual void Update(IReadOnlyList<RouteConfig> routes, IReadOnlyList<ClusterConfig> clusters)
     {
@@ -135,9 +136,6 @@ public class ConsulRouteMonitorWorker : BackgroundService, IProxyConfigProvider
     private sealed class ConsulProxyConfig : IProxyConfig
     {
         private readonly CancellationTokenSource _cts = new();
-        public IReadOnlyList<RouteConfig> Routes { get; }
-        public IReadOnlyList<ClusterConfig> Clusters { get; }
-        public IChangeToken ChangeToken { get; }
 
         public ConsulProxyConfig(IReadOnlyList<RouteConfig> routes, IReadOnlyList<ClusterConfig> clusters)
         {
@@ -145,6 +143,10 @@ public class ConsulRouteMonitorWorker : BackgroundService, IProxyConfigProvider
             Clusters = clusters;
             ChangeToken = new CancellationChangeToken(_cts.Token);
         }
+
+        public IReadOnlyList<RouteConfig> Routes { get; }
+        public IReadOnlyList<ClusterConfig> Clusters { get; }
+        public IChangeToken ChangeToken { get; }
 
         internal void SignalChange()
         {

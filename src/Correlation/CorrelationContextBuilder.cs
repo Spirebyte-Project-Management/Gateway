@@ -12,7 +12,7 @@ internal sealed class CorrelationContextBuilder : ICorrelationContextBuilder
     public CorrelationContext Build(HttpContext context, string correlationId, string spanContext,
         string name = null, string resourceId = null)
     {
-        return new()
+        return new CorrelationContext
         {
             CorrelationId = correlationId,
             Name = name ?? string.Empty,

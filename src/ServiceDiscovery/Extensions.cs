@@ -22,10 +22,10 @@ public static class Extensions
                 var url = consulClientConfig.GetValue<string>("url");
                 opts.Address = new Uri(url);
             }));
-        
+
             services.AddSingleton<ConsulRouteMonitorWorker>();
-            services.AddSingleton<IProxyConfigProvider>(p => p.GetService<ConsulRouteMonitorWorker>());   
-            
+            services.AddSingleton<IProxyConfigProvider>(p => p.GetService<ConsulRouteMonitorWorker>());
+
             services.AddHostedService(p => p.GetService<ConsulRouteMonitorWorker>());
         }
 

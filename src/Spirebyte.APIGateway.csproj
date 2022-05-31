@@ -24,7 +24,7 @@
         <PackageReference Include="Convey.Tracing.Jaeger.RabbitMQ" Version="1.0.*" />
         <PackageReference Include="IdentityModel.AspNetCore.AccessTokenValidation" Version="1.0.0-preview.3" />
         <PackageReference Include="IdentityModel.AspNetCore.OAuth2Introspection" Version="6.0.0" />
-        <PackageReference Include="Spirebyte.Shared" Version="1.0.17" />
+        <PackageReference Include="Spirebyte.Shared" Version="1.0.19" />
         <PackageReference Include="Yarp.ReverseProxy" Version="1.1.0-rc.1.22211.2" />
     </ItemGroup>
 

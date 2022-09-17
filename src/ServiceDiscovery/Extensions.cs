@@ -9,7 +9,7 @@ namespace Spirebyte.APIGateway.ServiceDiscovery;
 
 public static class Extensions
 {
-    public static IServiceCollection AddConsul(
+    public static IServiceCollection AddConsulRouteMatching(
         this IServiceCollection services,
         IConfiguration configuration)
     {

@@ -10,27 +10,9 @@
 
 
     <ItemGroup>
-        <PackageReference Include="Consul" Version="1.6.10.4" />
-        <PackageReference Include="Convey.Auth" Version="1.0.*" />
-        <PackageReference Include="Convey.HTTP" Version="1.0.*" />
-        <PackageReference Include="Convey.Logging" Version="1.0.*" />
-        <PackageReference Include="Convey.MessageBrokers.CQRS" Version="1.0.*" />
-        <PackageReference Include="Convey.MessageBrokers.RabbitMQ" Version="1.0.*" />
-        <PackageReference Include="Convey.Metrics.AppMetrics" Version="1.0.531" />
-        <PackageReference Include="Convey.Metrics.Prometheus" Version="1.0.*" />
-        <PackageReference Include="Convey.Secrets.Vault" Version="1.0.*" />
-        <PackageReference Include="Convey.Security" Version="1.0.*" />
-        <PackageReference Include="Convey.Tracing.Jaeger" Version="1.0.*" />
-        <PackageReference Include="Convey.Tracing.Jaeger.RabbitMQ" Version="1.0.*" />
-        <PackageReference Include="IdentityModel.AspNetCore.AccessTokenValidation" Version="1.0.0-preview.3" />
-        <PackageReference Include="IdentityModel.AspNetCore.OAuth2Introspection" Version="6.0.0" />
+        <PackageReference Include="Spirebyte.Framework" Version="1.1.6" />
         <PackageReference Include="Spirebyte.Shared" Version="1.0.19" />
         <PackageReference Include="Yarp.ReverseProxy" Version="1.1.0-rc.1.22211.2" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <None Remove="Certs\cloudflare.pfx" />
-        <None Remove="ntrada.yml" />
     </ItemGroup>
 
     <ItemGroup>

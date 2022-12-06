@@ -23,4 +23,6 @@ RUN dotnet publish "Spirebyte.APIGateway.csproj" -c Release -o /app/publish
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+ENV ASPNETCORE_ENVIRONMENT Docker
+ENV ASPNETCORE_FORWARDEDHEADERS_ENABLED true
 ENTRYPOINT ["dotnet", "Spirebyte.APIGateway.dll"]

@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Spirebyte.APIGateway.ServiceDiscovery;
 using Spirebyte.Framework;
 using Spirebyte.Framework.Contexts;
+using Yarp.ReverseProxy.Configuration;
 using Yarp.ReverseProxy.Transforms;
 
 namespace Spirebyte.APIGateway;
@@ -47,6 +48,16 @@ public class Program
                     endpoints.MapGet("",
                         ctx => ctx.Response.WriteAsync(ctx.RequestServices.GetService<AppInfo>()?.Name ?? string.Empty));
                     endpoints.MapGet("/ping", () => "pong");
+                    endpoints.MapGet("/routes", context =>
+                    {
+                        var proxyConfigProvider = context.RequestServices.GetService<IProxyConfigProvider>();
+                        return context.Response.WriteAsJsonAsync(proxyConfigProvider?.GetConfig().Routes);
+                    });
+                    endpoints.MapGet("/clusters", context =>
+                    {
+                        var proxyConfigProvider = context.RequestServices.GetService<IProxyConfigProvider>();
+                        return context.Response.WriteAsJsonAsync(proxyConfigProvider?.GetConfig().Clusters);
+                    });
                     endpoints.MapReverseProxy();
                 })
             );

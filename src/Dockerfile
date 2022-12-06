@@ -10,11 +10,11 @@ ARG Nuget_CustomFeedUserName
 ARG Nuget_CustomFeedPassword
 
 WORKDIR /src
-COPY ["src/Gateway/src/Spirebyte.APIGateway.csproj", "src/Gateway/src/"]
-RUN dotnet nuget add source --username $Nuget_CustomFeedUserName --password $Nuget_CustomFeedUserName --store-password-in-clear-text --name github "https://nuget.pkg.github.com/Spirebyte-Project-Management/index.json"
-RUN dotnet restore "src/Gateway/src/Spirebyte.APIGateway.csproj"
+COPY ["src/Spirebyte.APIGateway.csproj", "src/Gateway/"]
+RUN dotnet nuget add source --username ${Nuget_CustomFeedUserName} --password ${Nuget_CustomFeedPassword} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/Spirebyte-Project-Management/index.json"
+RUN dotnet restore "src/Gateway/Spirebyte.APIGateway.csproj"
 COPY . .
-WORKDIR "/src/src/Gateway/src"
+WORKDIR "/src/src"
 RUN dotnet build "Spirebyte.APIGateway.csproj" -c Release -o /app/build
 
 FROM build AS publish

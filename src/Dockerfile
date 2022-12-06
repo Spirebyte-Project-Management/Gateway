@@ -5,8 +5,13 @@ WORKDIR /app
 EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+
+ARG Nuget_CustomFeedUserName
+ARG Nuget_CustomFeedPassword
+
 WORKDIR /src
 COPY ["src/Gateway/src/Spirebyte.APIGateway.csproj", "src/Gateway/src/"]
+RUN dotnet nuget add source --username $Nuget_CustomFeedUserName --password $Nuget_CustomFeedUserName --store-password-in-clear-text --name github "https://nuget.pkg.github.com/Spirebyte-Project-Management/index.json"
 RUN dotnet restore "src/Gateway/src/Spirebyte.APIGateway.csproj"
 COPY . .
 WORKDIR "/src/src/Gateway/src"

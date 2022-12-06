@@ -10,8 +10,8 @@
 
 
     <ItemGroup>
-        <PackageReference Include="Spirebyte.Framework" Version="1.1.6" />
-        <PackageReference Include="Spirebyte.Shared" Version="1.0.19" />
+        <PackageReference Include="Spirebyte.Framework" Version="1.1.17" />
+        <PackageReference Include="Spirebyte.Shared" Version="1.0.22" />
         <PackageReference Include="Yarp.ReverseProxy" Version="1.1.0-rc.1.22211.2" />
     </ItemGroup>
 

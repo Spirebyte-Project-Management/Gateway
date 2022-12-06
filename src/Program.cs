@@ -26,21 +26,23 @@ public class Program
     {
         return WebHost.CreateDefaultBuilder(args)
             .AddSpirebyteFramework()
-            .ConfigureServices((ctx, services) => services
-                .AddConsulRouteMatching(ctx.Configuration)
-                .AddReverseProxy()
-                .LoadFromConfig(ctx.Configuration.GetSection("reverseProxy"))
-                .AddTransforms(builderContext =>
-                {
-                    builderContext.AddRequestTransform(transformContext =>
+            .ConfigureServices((ctx, services) =>
+            {
+                services
+                    .AddReverseProxy()
+                    .LoadFromConfig(ctx.Configuration.GetSection("reverseProxy"))
+                    .AddTransforms(builderContext =>
                     {
-                        var correlationId = transformContext.HttpContext.GetCorrelationId() ??
-                                            Guid.NewGuid().ToString("N");
-                        transformContext.ProxyRequest.Headers.Add("correlation-id", correlationId);
-                        return ValueTask.CompletedTask;
+                        builderContext.AddRequestTransform(transformContext =>
+                        {
+                            var correlationId = transformContext.HttpContext.GetCorrelationId() ??
+                                                Guid.NewGuid().ToString("N");
+                            transformContext.ProxyRequest.Headers.Add("correlation-id", correlationId);
+                            return ValueTask.CompletedTask;
+                        });
                     });
-                })
-            )
+                services.AddConsulRouteMatching(ctx.Configuration);
+            })
             .Configure(app => app
                 .UseSpirebyteFramework()
                 .UseEndpoints(endpoints =>

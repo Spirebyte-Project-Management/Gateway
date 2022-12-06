@@ -64,41 +64,45 @@ public class ConsulRouteMonitorWorker : BackgroundService, IProxyConfigProvider
         var serviceMapping = serviceResult.Response;
         foreach (var (key, svc) in serviceMapping)
         {
-            var destinations = clusters.GetValueOrDefault(svc.Service)?.Destinations
-                                   ?.ToDictionary(kvp => kvp.Key, kvp => kvp.Value) ??
-                               new Dictionary<string, DestinationConfig>();
-
-            destinations.Add(svc.ID, new DestinationConfig { Address = $"http://{svc.Address}:{svc.Port}" });
-
-            var clusterConfig = new ClusterConfig
+            if (svc.Meta.TryGetValue("yarp", out var enableYarp) &&
+                enableYarp.Equals("on", StringComparison.InvariantCulture))
             {
-                ClusterId = $"{svc.Service}-cluster",
-                LoadBalancingPolicy = LoadBalancingPolicies.RoundRobin,
-                Destinations = destinations,
-                HealthCheck = new HealthCheckConfig()
+                var destinations = clusters.GetValueOrDefault(svc.Service)?.Destinations
+                                       ?.ToDictionary(kvp => kvp.Key, kvp => kvp.Value) ??
+                                   new Dictionary<string, DestinationConfig>();
+
+                destinations.Add(svc.ID, new DestinationConfig { Address = $"http://{svc.Address}:{svc.Port}" });
+
+                var clusterConfig = new ClusterConfig
                 {
-                    Active = new ActiveHealthCheckConfig()
+                    ClusterId = $"{svc.Service}-cluster",
+                    LoadBalancingPolicy = LoadBalancingPolicies.RoundRobin,
+                    Destinations = destinations,
+                    HealthCheck = new HealthCheckConfig()
                     {
-                        Enabled = true,
-                        Interval = TimeSpan.FromSeconds(10),
-                        Timeout = TimeSpan.FromSeconds(10),
-                        Policy = HealthCheckConstants.ActivePolicy.ConsecutiveFailures,
-                        Path = "/ping"
-                        
+                        Active = new ActiveHealthCheckConfig()
+                        {
+                            Enabled = true,
+                            Interval = TimeSpan.FromSeconds(10),
+                            Timeout = TimeSpan.FromSeconds(10),
+                            Policy = HealthCheckConstants.ActivePolicy.ConsecutiveFailures,
+                            Path = "/ping"
+
+                        }
                     }
+                };
+
+                var clusterErrs = await _proxyConfigValidator.ValidateClusterAsync(clusterConfig);
+                if (clusterErrs.Any())
+                {
+                    _logger.LogError("Errors found when creating clusters for {Service}", svc.Service);
+                    foreach (var err in clusterErrs)
+                        _logger.LogError(err, "{svc.Service} cluster validation error", svc.Service);
+                    continue;
                 }
-            };
 
-            var clusterErrs = await _proxyConfigValidator.ValidateClusterAsync(clusterConfig);
-            if (clusterErrs.Any())
-            {
-                _logger.LogError("Errors found when creating clusters for {Service}", svc.Service);
-                foreach (var err in clusterErrs)
-                    _logger.LogError(err, "{svc.Service} cluster validation error", svc.Service);
-                continue;
+                clusters[svc.Service] = clusterConfig;
             }
-
-            clusters[svc.Service] = clusterConfig;
         }
 
         return clusters.Values.ToList();

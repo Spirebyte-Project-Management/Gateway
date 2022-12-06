@@ -9,6 +9,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Primitives;
 using Yarp.ReverseProxy.Configuration;
+using Yarp.ReverseProxy.Health;
 using Yarp.ReverseProxy.LoadBalancing;
 
 namespace Spirebyte.APIGateway.ServiceDiscovery;
@@ -73,7 +74,19 @@ public class ConsulRouteMonitorWorker : BackgroundService, IProxyConfigProvider
             {
                 ClusterId = $"{svc.Service}-cluster",
                 LoadBalancingPolicy = LoadBalancingPolicies.RoundRobin,
-                Destinations = destinations
+                Destinations = destinations,
+                HealthCheck = new HealthCheckConfig()
+                {
+                    Active = new ActiveHealthCheckConfig()
+                    {
+                        Enabled = true,
+                        Interval = TimeSpan.FromSeconds(10),
+                        Timeout = TimeSpan.FromSeconds(10),
+                        Policy = HealthCheckConstants.ActivePolicy.ConsecutiveFailures,
+                        Path = "/ping"
+                        
+                    }
+                }
             };
 
             var clusterErrs = await _proxyConfigValidator.ValidateClusterAsync(clusterConfig);

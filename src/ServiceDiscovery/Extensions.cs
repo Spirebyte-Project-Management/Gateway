@@ -17,12 +17,6 @@ public static class Extensions
 
         if (consulClientConfig.GetValue<bool>("enabled"))
         {
-            services.TryAddSingleton<IConsulClient>(sp => new ConsulClient(opts =>
-            {
-                var url = consulClientConfig.GetValue<string>("url");
-                opts.Address = new Uri(url);
-            }));
-
             services.AddSingleton<ConsulRouteMonitorWorker>();
             services.AddSingleton<IProxyConfigProvider>(p => p.GetService<ConsulRouteMonitorWorker>());
 

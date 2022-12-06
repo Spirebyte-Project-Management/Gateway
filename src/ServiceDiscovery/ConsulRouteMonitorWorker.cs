@@ -43,9 +43,13 @@ public class ConsulRouteMonitorWorker : BackgroundService, IProxyConfigProvider
 
             if (serviceResult.StatusCode == HttpStatusCode.OK)
             {
+                _logger.LogInformation("Refreshing routes and clusters");
+                
                 var clusters = await ExtractClusters(serviceResult);
                 var routes = await ExtractRoutes(serviceResult);
-
+                
+                _logger.LogInformation("Retrieved {ClusterCount} clusters and {RouteCount} routes", clusters.Count, routes.Count);
+                
                 Update(routes, clusters);
             }
 

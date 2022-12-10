@@ -1,8 +1,5 @@
-﻿using System;
-using Consul;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Yarp.ReverseProxy.Configuration;
 
 namespace Spirebyte.APIGateway.ServiceDiscovery;
